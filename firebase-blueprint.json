@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile, XP score, solved challenge IDs, unlocked hint IDs, and earned badges",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 256
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name or hacker handle",
+          "maxLength": 100
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Profile avatar URL",
+          "maxLength": 1024
+        },
+        "xp": {
+          "type": "integer",
+          "description": "Current cumulative XP earned minus spent on hints"
+        },
+        "rank": {
+          "type": "string",
+          "description": "Security rank title",
+          "maxLength": 64
+        },
+        "completedChallenges": {
+          "type": "array",
+          "description": "List of solved challenge IDs"
+        },
+        "unlockedHints": {
+          "type": "array",
+          "description": "List of hint keys unlocked by the user in format challengeId:hintId"
+        },
+        "badges": {
+          "type": "array",
+          "description": "List of badge IDs unlocked by user"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["userId", "email", "xp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile with game progress, XP balance, unlocked hints, and completed CTF labs"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "BlockSecLab - Web3 Smart Contract Security CTF",
+  "description": "Gamified hands-on smart contract security and audit training laboratory with interactive Monaco Solidity IDE and Foundry execution sandbox.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

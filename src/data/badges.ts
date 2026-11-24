@@ -1,0 +1,82 @@
+import { AuditorBadge } from '../types';
+
+export const BADGES: AuditorBadge[] = [
+  {
+    id: 'badge-first-blood',
+    title: 'First Blood',
+    description: 'Successfully submit your first verified exploit PoC and capture a flag.',
+    icon: 'Sword',
+    category: 'meta',
+    requiredChallengesCount: 1,
+  },
+  {
+    id: 'badge-reentrancy-slayer',
+    title: 'Reentrancy Slayer',
+    description: 'Mastered CEI order-of-execution and drained the vulnerable EtherStore vault.',
+    icon: 'ShieldAlert',
+    category: 'defi',
+  },
+  {
+    id: 'badge-flash-arbitrageur',
+    title: 'Oracle Arbitrageur',
+    description: 'Exploited instantaneous AMM spot reserves and drained LendMax collateral.',
+    icon: 'TrendingUp',
+    category: 'oracles',
+  },
+  {
+    id: 'badge-proxy-sovereign',
+    title: 'Proxy Sovereign',
+    description: 'Claimed uninitialized UUPS implementation ownership and triggered selfdestruct.',
+    icon: 'Key',
+    category: 'access-control',
+  },
+  {
+    id: 'badge-math-auditor',
+    title: 'Rounding Invariant Auditor',
+    description: 'Executed an ERC-4626 first depositor share inflation attack with precision math.',
+    icon: 'Percent',
+    category: 'math-logic',
+  },
+  {
+    id: 'badge-storage-master',
+    title: 'EVM Storage Master',
+    description: 'Corrupted proxy implementation slot 0 using low-level delegatecall collision.',
+    icon: 'Cpu',
+    category: 'low-level',
+  },
+  {
+    id: 'badge-pure-auditor',
+    title: 'Clean Hands Auditor',
+    description: 'Solved a challenge entirely without unlocking any hint tiers.',
+    icon: 'Sparkles',
+    category: 'meta',
+  },
+  {
+    id: 'badge-dvd-conqueror',
+    title: 'Damn Vulnerable DeFi Conqueror',
+    description: 'Mastered flash loan exploits including arbitrary call hijacking and accounting confusion.',
+    icon: 'Zap',
+    category: 'defi',
+  },
+  {
+    id: 'badge-apex-sovereign',
+    title: 'Apex Sovereign Whitehat',
+    description: 'Completed curriculum security tracks and attained top-tier security rank.',
+    icon: 'Crown',
+    category: 'meta',
+  },
+  {
+    id: 'badge-swc-master',
+    title: 'SWC Registry Specialist',
+    description: 'Diagnosed and solved foundational SWC vulnerabilities including integer overflow, unchecked calls, and private storage leaks.',
+    icon: 'Shield',
+    category: 'low-level',
+  },
+  {
+    id: 'badge-dos-king',
+    title: 'Eternal Crown Whitehat',
+    description: 'Perpetuated an uncatchable Denial of Service attack via unexpected reverts (SWC-113 King of Ether).',
+    icon: 'Lock',
+    category: 'low-level',
+  },
+];

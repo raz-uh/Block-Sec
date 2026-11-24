@@ -1,0 +1,186 @@
+// BlockSecLab - Production PostgreSQL Schema with Prisma ORM
+// Supports multi-tiered curriculum (Levels 0, 1, 2), challenge submissions,
+// hint deductions, audit badges, and real-time leaderboards.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CurriculumLevel {
+  LEVEL_0_BASICS
+  LEVEL_1_SECURITY_CTF
+  LEVEL_2_ADVANCED_DEFI
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ELITE
+}
+
+enum SubmissionStatus {
+  PASS
+  FAIL
+  COMPILE_ERROR
+  TIMEOUT
+}
+
+enum AuditorRank {
+  SCRIPT_KIDDIE
+  JUNIOR_AUDITOR
+  PROTOCOL_WHITEHAT
+  LEAD_SECURITY_RESEARCHER
+  APEX_SOVEREIGN_AUDITOR
+}
+
+model User {
+  id              String         @id @default(uuid())
+  walletAddress   String?        @unique
+  username        String         @unique
+  avatarUrl       String?
+  totalXp         Int            @default(0)
+  rankTitle       AuditorRank    @default(SCRIPT_KIDDIE)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  submissions     Submission[]
+  unlockedHints   HintUnlock[]
+  badges          UserBadge[]
+  solves          UserSolve[]
+
+  @@index([totalXp(sort: Desc)])
+}
+
+model Challenge {
+  id               String          @id
+  slug             String          @unique
+  title            String
+  level            CurriculumLevel @default(LEVEL_1_SECURITY_CTF)
+  difficulty       Difficulty      @default(INTERMEDIATE)
+  category         String
+  tags             String[]
+  xpReward         Int             @default(100)
+  estimatedMinutes Int             @default(20)
+  swcTag           String?
+  cweTag           String?
+  solveRatePercent Float           @default(0.0)
+
+  // Rich pedagogical content & theory (stored structured)
+  theoryMarkdown   String          @db.Text
+  conceptSummary   String[]
+  objectiveText    String          @db.Text
+
+  // Contract sources
+  targetFileName   String
+  targetSource     String          @db.Text
+  exploitFileName  String
+  exploitTemplate  String          @db.Text
+  solutionSource   String          @db.Text
+  testFileName     String
+  testSource       String          @db.Text
+
+  // CTF flag hash/verification
+  flagHash         String
+  rawFlagSecret    String?
+
+  // Remediation & debrief
+  patchDiffJson    Json?
+  historicalCase   Json?
+
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  hints            Hint[]
+  submissions      Submission[]
+  solves           UserSolve[]
+
+  @@index([level, difficulty])
+}
+
+model Hint {
+  id           String        @id @default(uuid())
+  challengeId  String
+  tier         Int           // 1, 2, or 3
+  title        String
+  costXp       Int           @default(0)
+  content      String        @db.Text
+
+  challenge    Challenge     @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  unlocks      HintUnlock[]
+
+  @@unique([challengeId, tier])
+}
+
+model HintUnlock {
+  id          String    @id @default(uuid())
+  userId      String
+  hintId      String
+  challengeId String
+  costPaid    Int       @default(0)
+  unlockedAt  DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hint        Hint      @relation(fields: [hintId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, hintId])
+  @@index([userId, challengeId])
+}
+
+model Submission {
+  id             String           @id @default(uuid())
+  userId         String
+  challengeId    String
+  exploitCode    String           @db.Text
+  status         SubmissionStatus
+  exitCode       Int              @default(0)
+  gasUsed        Int              @default(0)
+  durationMs     Int              @default(0)
+  stdout         String?          @db.Text
+  stderr         String?          @db.Text
+  tracesJson     Json?
+  gasReportJson  Json?
+  flagSubmitted  String?
+  createdAt      DateTime         @default(now())
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge      Challenge        @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@index([userId, challengeId])
+  @@index([status, createdAt])
+}
+
+model UserSolve {
+  id           String    @id @default(uuid())
+  userId       String
+  challengeId  String
+  xpEarned     Int       @default(0)
+  gasUsed      Int       @default(0)
+  solvedAt     DateTime  @default(now())
+
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, challengeId])
+  @@index([userId, solvedAt])
+}
+
+model UserBadge {
+  id          String    @id @default(uuid())
+  userId      String
+  badgeKey    String    // e.g. "badge-reentrancy-slayer"
+  title       String
+  description String
+  category    String
+  unlockedAt  DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeKey])
+  @@index([userId])
+}

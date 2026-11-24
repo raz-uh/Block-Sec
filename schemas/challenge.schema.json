@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BlockSecLabChallenge",
+  "description": "Standard schema for BlockSecLab Solidity tutorial levels and security CTF challenges.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "level",
+    "difficulty",
+    "category",
+    "tags",
+    "xpPoints",
+    "estimatedMinutes",
+    "learning",
+    "contracts",
+    "flag"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(lvl0|lvl1|lvl2)-[a-z0-9-]+$"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "level": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "0: Basics, 1: Intermediate CTFs, 2: Advanced DeFi/Architecture"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["Beginner", "Intermediate", "Advanced", "Elite"]
+    },
+    "category": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "xpPoints": {
+      "type": "integer",
+      "minimum": 25,
+      "maximum": 1000
+    },
+    "estimatedMinutes": {
+      "type": "integer",
+      "minimum": 5
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "learning": {
+      "type": "object",
+      "required": ["conceptSummary", "theoryExplanation", "hints"],
+      "properties": {
+        "conceptSummary": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "theoryExplanation": { "type": "string" },
+        "swcTag": { "type": "string" },
+        "cweTag": { "type": "string" },
+        "hints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "tier", "title", "costXp", "markdown"],
+            "properties": {
+              "id": { "type": "string" },
+              "tier": { "type": "integer", "enum": [1, 2, 3] },
+              "title": { "type": "string" },
+              "costXp": { "type": "integer" },
+              "markdown": { "type": "string" }
+            }
+          }
+        },
+        "realWorldIncident": {
+          "type": "object",
+          "properties": {
+            "protocolName": { "type": "string" },
+            "date": { "type": "string" },
+            "lossUsd": { "type": "string" },
+            "summary": { "type": "string" },
+            "referenceUrl": { "type": "string" }
+          }
+        },
+        "remediation": {
+          "type": "object",
+          "properties": {
+            "explanation": { "type": "string" },
+            "vulnerableSnippet": { "type": "string" },
+            "securedSnippet": { "type": "string" },
+            "bestPractices": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "required": ["target", "userExploit", "foundryTest"],
+      "properties": {
+        "target": {
+          "type": "object",
+          "required": ["name", "path", "content", "readOnly", "description"],
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" },
+            "content": { "type": "string" },
+            "readOnly": { "type": "boolean" },
+            "description": { "type": "string" }
+          }
+        },
+        "userExploit": {
+          "type": "object",
+          "required": ["name", "path", "initialTemplate", "verifiedSolution", "description"],
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" },
+            "initialTemplate": { "type": "string" },
+            "verifiedSolution": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "foundryTest": {
+          "type": "object",
+          "required": ["name", "path", "content", "testFunctionName", "invariants"],
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" },
+            "content": { "type": "string" },
+            "testFunctionName": { "type": "string" },
+            "invariants": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["description", "formula", "expectedOutcome"],
+                "properties": {
+                  "description": { "type": "string" },
+                  "formula": { "type": "string" },
+                  "expectedOutcome": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "flag": {
+      "type": "string",
+      "pattern": "^BLOCKSEC\\{[a-zA-Z0-9_-]+\\}$"
+    }
+  }
+}

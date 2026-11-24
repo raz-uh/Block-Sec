@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Suppress harmless Vite dev WebSocket errors in the iframe proxy environment
+      window.addEventListener('error', function(e) {
+        if (
+          e.message && (e.message.includes('WebSocket') || e.message.includes('createWebSocketModuleRunnerTransport')) ||
+          (e.filename && e.filename.includes('@vite/client'))
+        ) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function(e) {
+        if (
+          e.reason && (
+            (e.reason.message && e.reason.message.includes('WebSocket')) ||
+            (e.reason.stack && e.reason.stack.includes('@vite/client'))
+          )
+        ) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+    </script>
+    <title>BlockSecLab - Web3 Smart Contract Security CTF</title>
+    <meta name="description" content="Gamified hands-on smart contract security and audit training laboratory with interactive Monaco Solidity IDE and Foundry execution sandbox." />
+    <meta property="og:title" content="BlockSecLab - Web3 Smart Contract Security CTF" />
+    <meta property="og:description" content="Gamified hands-on smart contract security and audit training laboratory with interactive Monaco Solidity IDE and Foundry execution sandbox." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#090d16] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
